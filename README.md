@@ -16,11 +16,17 @@ Proje, veri setinin temizlenmesi ve analizi için bir dizi adımdan oluşmaktad�
 4.  **Veri Profilleme**: `ydata_profiling` kütüphanesi ile veri setinin ayrıntılı bir profili oluşturulmuştur.
 5.  **Metin Verilerini Temizleme**: Sütunlardaki tüm metin verileri küçük harfe dönüştürülmüştür. Ayrıca, gürültülü veriler tespit edilip **(örneğin: "deneme", "onur", "xx")** kaldırılmıştır. `Tanilar` sütunundaki fazla virgül ve boşluklar temizlenmiştir.
 6.  **Eksik Değerlerin Doldurulması**:
-    * `Cinsiyet` sütunundaki eksik değerler "bilinmiyor" kullanılarak doldurulmuştur. 
-    * `Bolum` sütunundaki eksik değerler `KNNImputer` kullanılarak doldurulmuştur.
-    * `Alerji` sütunundaki eksik değerler "Yok" olarak atanmıştır.
-    * `UygulamaYerleri` sütunundaki eksik değerler, "bilinmiyor" ile doldurulmuştur.
-    * `KronikHastalik` ve `Tanilar` sütunlarındaki eksik değerler sırasıyla "Yok" ve "bilinmiyor" olarak belirlenmiştir.
+   - İlk olarak NaN değerlere şu şekilde müdahale edildi:
+      - Bir hastaya ait KanGrubu eğer bir satırda biliniyor ise diğer satırlarda da o şekilde kabul edildi çünkü bir hastanın kan grubu değişmez.
+      - Aynı şekilde Cinsiyet, KronikHastalik ve Alerji değişkenleri için de aynı mantık uygulandı. Hastanın Cinsiyeti değişmez. 
+Kronik hastalığı artabilir ya da yeni bir Alerjisi olabilir ancak bu mantık ile mevcut korundu.
+   - Daha sonra ise 
+       - Cinsiyet değişkenindeki NaN değerler "Bilinmiyor"
+       - KronikHastalik değişkenindeki NaN değerler "yok"
+       - Tanilar değişkenindeki NaN değerler "bilinmiyor"
+       - KanGrubu değişkenindeki NaN değerler "bilinmiyor"
+       - UygulamaYerleri değişkenindeki NaN değerler "bilinmiyor"
+        olarak dolduruldu. Veride yanlılık yaratmamak ve veri setinin örüntüsü korunması amaçlandı.
 7.  **Benzer Değerleri Gruplama**: `Tanilar` sütunundaki benzer veriler, `rapidfuzz` kütüphanesi ile ve 
 `Tanilar`,`UygulamaYerleri`,`TedaviAdi` değişkenlerine TF-IDF vektörleştirme yöntemi kullanılmıştır.
 
